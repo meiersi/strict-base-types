@@ -1,3 +1,17 @@
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Data.Strict.Hyperstrict
+-- Copyright   :  (c) Roman Leshchinskiy 2006
+-- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- 
+-- Maintainer  :  rl@cse.unsw.edu.au
+-- Stability   :  experimental
+-- Portability :  portable
+--
+-- Hyperstrict types.
+--
+-----------------------------------------------------------------------------
+
 module Data.Strict.Hyperstrict (
   Hyperstrict
 ) where
@@ -9,6 +23,9 @@ import qualified Data.Strict.Either as S
 import Data.Word
 import Data.Int
 
+-- | Instances of 'Hyperstrict' should be hyperstrict types, i.e., those types
+-- for which the weak head-normal form and the normal form are the same. This
+-- class has no methods; it is only used to increase type safety.
 class Hyperstrict a
 
 instance Hyperstrict ()

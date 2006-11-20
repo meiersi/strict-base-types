@@ -1,3 +1,17 @@
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Data.Strict
+-- Copyright   :  (c) Roman Leshchinskiy 2006
+-- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- 
+-- Maintainer  :  rl@cse.unsw.edu.au
+-- Stability   :  experimental
+-- Portability :  portable
+--
+-- Strict versions of some standard Haskell types.
+--
+-----------------------------------------------------------------------------
+
 module Data.Strict (
     module Data.Strict.Pair
   , module Data.Strict.Maybe
