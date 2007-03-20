@@ -4,6 +4,7 @@ license:        BSD3
 license-file:   LICENSE
 author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>
 maintainer:     Roman Leshchinskiy <rl@cse.unsw.edu.au>
+category:       Data
 synopsis:       Strict data types
 description:
         This package provides strict versions of some standard Haskell data
