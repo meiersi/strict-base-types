@@ -15,5 +15,6 @@ exposed-modules:
         Data.Strict,
         Data.Lazy
 build-depends:  base
+ghc-options: -Wall -O
 extensions:     CPP
 
