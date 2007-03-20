@@ -16,6 +16,9 @@ module Data.Strict (
     module Data.Strict.Tuple
   , module Data.Strict.Maybe
   , module Data.Strict.Either
+
+  , SSeq(..)
+  , Hide(..)
 ) where
 
 import Data.Strict.Tuple
