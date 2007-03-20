@@ -16,7 +16,7 @@ module Data.Strict.Hyperstrict (
   Hyperstrict
 ) where
 
-import qualified Data.Strict.Pair   as S
+import qualified Data.Strict.Tuple  as S
 import qualified Data.Strict.Maybe  as S
 import qualified Data.Strict.Either as S
 

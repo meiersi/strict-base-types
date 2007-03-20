@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
 -- |
--- Module      :  Data.Strict.Pair
+-- Module      :  Data.Strict.Tuple
 -- Copyright   :  (c) Roman Leshchinskiy 2006
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 -- 
@@ -16,7 +16,7 @@
 
 {-# OPTIONS_GHC -fglasgow-exts #-}
 
-module Data.Strict.Pair (
+module Data.Strict.Tuple (
     Pair(..)
 #ifndef __HADDOCK__
 #ifdef __GLASGOW_HASKELL__
@@ -30,11 +30,12 @@ module Data.Strict.Pair (
 ) where
 
 import Prelude hiding( fst, snd, curry, uncurry )
+import Data.Array (Ix)
 
 infixl 2 :*:
 
 -- | The type of strict pairs.
-data Pair a b = !a :*: !b deriving(Eq, Ord, Show, Read, Bounded)
+data Pair a b = !a :*: !b deriving(Eq, Ord, Show, Read, Bounded, Ix)
 
 #ifndef __HADDOCK__
 #ifdef __GLASGOW_HASKELL__

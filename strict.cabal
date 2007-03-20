@@ -9,7 +9,7 @@ description:
         This package provides strict versions of some standard Haskell data
         types.
 exposed-modules:
-        Data.Strict.Pair,
+        Data.Strict.Tuple,
         Data.Strict.Maybe,
         Data.Strict.Either,
         Data.Strict.Hyperstrict,
