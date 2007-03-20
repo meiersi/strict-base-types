@@ -17,6 +17,8 @@
 module Data.Strict.Either (
     Either(..)
   , either
+  , isLeft, isRight
+  , fromLeft, fromRight
 ) where
 
 import Prelude hiding( Either(..), either )
@@ -33,5 +35,30 @@ instance Functor (Either a) where
 either :: (a -> c) -> (b -> c) -> Either a b -> c
 either f _ (Left  x) = f x
 either _ g (Right y) = g y
+
+-- | Yields 'True' iff the argument is of the form @Left _@.
+--
+isLeft :: Either a b -> Bool
+isLeft (Left x) = True
+isLeft _        = False
+
+-- | Yields 'True' iff the argument is of the form @Right _@.
+--
+isRight :: Either a b -> Bool
+isRight (Right x) = True
+isRight _         = False
+
+-- | Extracts the element out of a 'Left' and throws an error if the argument
+-- is a 'Right'.
+fromLeft :: Either a b -> a
+fromLeft (Left x) = x
+fromLeft _        = error "Data.Strict.Either.fromLeft: Right"
+
+-- | Extracts the element out of a 'Right' and throws an error if the argument
+-- is a 'Left'.
+fromRight :: Either a b -> b
+fromRight (Right x) = x
+fromRight _         = error "Data.Strict.Either.fromRight: Left"
+
 
 
