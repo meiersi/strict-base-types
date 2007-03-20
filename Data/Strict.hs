@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Strict
--- Copyright   :  (c) 2006-2007 Roman Leshchinskiy 2006
+-- Copyright   :  (c) 2006-2007 Roman Leshchinskiy
 -- License     :  BSD-style (see the file LICENSE)
 -- 
 -- Maintainer  :  Roman Leshchinskiy <rl@cse.unsw.edu.au>
