@@ -39,7 +39,7 @@ data Pair a b = !a :!: !b deriving(Eq, Ord, Show, Read, Bounded, Ix)
 
 #ifndef __HADDOCK__
 #ifdef __GLASGOW_HASKELL__
--- This gives a nicer syntax for the type but only works on GHC for now.
+-- This gives a nicer syntax for the type but only works in GHC for now.
 type (:!:) = Pair
 #endif
 #endif

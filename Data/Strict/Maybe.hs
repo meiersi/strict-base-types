@@ -4,13 +4,17 @@
 -- Copyright   :  (c) Roman Leshchinskiy 2006
 -- License     :  BSD-style (see the file libraries/base/LICENSE)
 -- 
--- Maintainer  :  rl@cse.unsw.edu.au
+-- Maintainer  :  Roman Leshchinskiy <rl@cse.unsw.edu.au>
 -- Stability   :  experimental
 -- Portability :  portable
 --
 -- Strict @Maybe@.
 --
 -- Same as the standard Haskell @Maybe@, but @Just _|_ = _|_@
+--
+-- Note that strict @Maybe@ is not a monad since
+-- @ return _|_ >>= f = _|_ @
+-- which is not necessarily the same as @f _|_@.
 --
 -----------------------------------------------------------------------------
 
