@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Strict.Tuple
--- Copyright   :  (c) Roman Leshchinskiy 2006
--- License     :  BSD-style (see the file libraries/base/LICENSE)
+-- Copyright   :  (c) 2006-2007 Roman Leshchinskiy
+-- License     :  BSD-style (see the file LICENSE)
 -- 
--- Maintainer  :  rl@cse.unsw.edu.au
+-- Maintainer  :  Roman Leshchinskiy <rl@cse.unsw.edu.au>
 -- Stability   :  experimental
 -- Portability :  portable
 --
