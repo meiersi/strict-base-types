@@ -39,13 +39,13 @@ either _ g (Right y) = g y
 -- | Yields 'True' iff the argument is of the form @Left _@.
 --
 isLeft :: Either a b -> Bool
-isLeft (Left x) = True
+isLeft (Left _) = True
 isLeft _        = False
 
 -- | Yields 'True' iff the argument is of the form @Right _@.
 --
 isRight :: Either a b -> Bool
-isRight (Right x) = True
+isRight (Right _) = True
 isRight _         = False
 
 -- | Extracts the element out of a 'Left' and throws an error if the argument
