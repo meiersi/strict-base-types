@@ -53,9 +53,9 @@ instance (SSeq a, SSeq b) => SSeq (S.Either a b) where
   S.Left  x `sseq` y = x `sseq` y
   S.Right x `sseq` y = x `sseq` y
 
-newtype UnSSeq a = UnSSeq a
+newtype Hide a = Hide a
 
-instance SSeq (UnSSeq a)
+instance SSeq (Hide a)
 
 instance SSeq (Lazy a)
 
