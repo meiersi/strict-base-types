@@ -13,8 +13,7 @@ exposed-modules:
         Data.Strict.Tuple,
         Data.Strict.Maybe,
         Data.Strict.Either,
-        Data.Strict,
-        Data.Lazy
+        Data.Strict
 build-depends:  base
 ghc-options: -Wall -O
 extensions:     CPP
