@@ -27,27 +27,27 @@ import Data.Strict.Either as S
 
 infixr 0 `sseq`
 
-class Strict a where
+class SSeq a where
   sseq :: a -> b -> b
 
   {-# INLINE sseq #-}
   sseq = seq
 
-instance Strict ()
-instance Strict Bool
-instance Strict Char
-instance Strict Int
-instance Strict Float
-instance Strict Double
+instance SSeq ()
+instance SSeq Bool
+instance SSeq Char
+instance SSeq Int
+instance SSeq Float
+instance SSeq Double
 
-instance (Strict a, Strict b) => Strict (S.Pair a b) where
+instance (SSeq a, SSeq b) => SSeq (S.Pair a b) where
   x S.:!: y `sseq` z = x `sseq` y `sseq` z
 
-instance Strict a => Strict (S.Maybe a) where
+instance SSeq a => SSeq (S.Maybe a) where
   S.Nothing `sseq` y = y
   S.Just x  `sseq` y = x `sseq` y
 
-instance (Strict a, Strict b) => Strict (S.Either a b) where
+instance (SSeq a, SSeq b) => SSeq (S.Either a b) where
   S.Left  x `sseq` y = x `sseq` y
   S.Right x `sseq` y = x `sseq` y
 
