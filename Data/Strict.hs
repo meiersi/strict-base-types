@@ -25,6 +25,8 @@ import Data.Strict.Maybe  as S
 import Data.Strict.Either
 import Data.Strict.Either as S
 
+import Data.Lazy
+
 infixr 0 `sseq`
 
 class SSeq a where
@@ -50,4 +52,10 @@ instance SSeq a => SSeq (S.Maybe a) where
 instance (SSeq a, SSeq b) => SSeq (S.Either a b) where
   S.Left  x `sseq` y = x `sseq` y
   S.Right x `sseq` y = x `sseq` y
+
+newtype UnSSeq a = UnSSeq a
+
+instance SSeq (UnSSeq a)
+
+instance SSeq (Lazy a)
 

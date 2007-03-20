@@ -12,7 +12,8 @@ exposed-modules:
         Data.Strict.Tuple,
         Data.Strict.Maybe,
         Data.Strict.Either,
-        Data.Strict
+        Data.Strict,
+        Data.Lazy
 build-depends:  base
 extensions:     CPP
 
