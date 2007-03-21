@@ -8,7 +8,6 @@ Description:
 License:        BSD3
 License-File:   LICENSE
 Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>
-Maintainer:     Roman Leshchinskiy <rl@cse.unsw.edu.au>
 Copyright:      (c) 2006-2007 by Roman Leshchinskiy
 Homepage:       http://www.cse.unsw.edu.au/~rl/code/strict.html
 Exposed-Modules:
