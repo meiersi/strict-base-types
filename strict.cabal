@@ -1,5 +1,5 @@
 Name:           strict
-Version:        0.1
+Version:        0.2
 Synopsis:       Strict data types
 Category:       Data
 Description:
@@ -11,12 +11,19 @@ Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>
 Maintainer:     Roman Leshchinskiy <rl@cse.unsw.edu.au>
 Copyright:      (c) 2006-2007 by Roman Leshchinskiy
 Homepage:       http://www.cse.unsw.edu.au/~rl/code/strict.html
-Exposed-Modules:
+Cabal-Version: >= 1.2
+
+flag split-base
+
+library
+  if flag(split-base)
+    build-depends:     base >= 3, array
+  else
+    build-depends:     base < 3
+  exposed-modules:
         Data.Strict.Tuple,
         Data.Strict.Maybe,
         Data.Strict.Either,
         Data.Strict
-Build-Depends:  base
-Ghc-Options: -Wall -O
-Extensions:     CPP
-
+  ghc-options:    -Wall -Werror -O2
+  extensions:     CPP
