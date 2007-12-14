@@ -65,7 +65,7 @@ interact f      =   IO.putStr . f =<< getContents
 
 -- | The 'readFile' function reads a file and
 -- returns the contents of the file as a string.
--- The file is read lazily, on demand, as with 'getContents'.
+-- The file is read strictly, as with 'getContents'.
 
 readFile        :: FilePath -> IO String
 readFile name   =  IO.openFile name IO.ReadMode >>= hGetContents
