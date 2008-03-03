@@ -13,6 +13,7 @@ Maintainer:     Don Stewart <dons@galois.com>
 Copyright:      (c) 2006-2007 by Roman Leshchinskiy
 Homepage:       http://www.cse.unsw.edu.au/~rl/code/strict.html
 Cabal-Version: >= 1.2
+Build-type:     Simple
 
 flag split-base
 
