@@ -42,7 +42,7 @@ import qualified System.IO as IO
 --  * 'isEOFError' if the end of file has been reached.
 
 hGetContents    :: IO.Handle -> IO.IO String
-hGetContents h  = IO.hGetContents h >>= \s -> last s `seq` return s
+hGetContents h  = IO.hGetContents h >>= \s -> length s `seq` return s
 
 -- -----------------------------------------------------------------------------
 -- Standard IO
