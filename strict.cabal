@@ -28,5 +28,5 @@ library
         Data.Strict.Either
         Data.Strict
         System.IO.Strict
-  ghc-options:    -Wall -Werror -O2
+  ghc-options:    -Wall
   extensions:     CPP
