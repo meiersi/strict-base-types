@@ -24,7 +24,7 @@ module System.IO.Strict (
 
   ) where
 
-import Prelude ( String, (>>=), last, seq, return, (.), (=<<), FilePath, length)
+import Prelude ( String, (>>=), seq, return, (.), (=<<), FilePath, length)
 import System.IO (IO)
 import qualified System.IO as IO
 
