@@ -21,7 +21,9 @@ module Data.Strict.Either (
   , fromLeft, fromRight
 ) where
 
+import Control.Applicative
 import Data.Foldable
+import Data.Traversable
 import Prelude hiding( Either(..), either )
 
 -- | The strict choice type.
@@ -37,6 +39,10 @@ instance Foldable (Either a) where
 
   foldl _ y (Left _)  = y
   foldl f y (Right x) = f y x
+
+instance Traversable (Either a) where
+  traverse _ (Left x)  = pure (Left x)
+  traverse f (Right x) = Right <$> f x
 
 -- | Case analysis: if the value is @'Left' a@, apply the first function to @a@;
 -- if it is @'Right' b@, apply the second function to @b@.
