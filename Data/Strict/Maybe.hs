@@ -27,7 +27,9 @@ module Data.Strict.Maybe (
   , maybe
 ) where
 
+import Control.Applicative
 import Data.Foldable
+import Data.Traversable
 import Prelude hiding( Maybe(..), maybe )
 
 -- | The type of strict optional values.
@@ -43,6 +45,10 @@ instance Foldable Maybe where
 
   foldl _ y Nothing  = y
   foldl f y (Just x) = f y x
+
+instance Traversable Maybe where
+  traverse _ Nothing  = pure Nothing
+  traverse f (Just x) = Just <$> f x
 
 -- | Yields 'True' iff the argument is of the form @Just _@.
 isJust :: Maybe a -> Bool
