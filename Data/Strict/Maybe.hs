@@ -27,6 +27,7 @@ module Data.Strict.Maybe (
   , maybe
 ) where
 
+import Data.Foldable
 import Prelude hiding( Maybe(..), maybe )
 
 -- | The type of strict optional values.
@@ -35,6 +36,13 @@ data Maybe a = Nothing | Just !a deriving(Eq, Ord, Show, Read)
 instance Functor Maybe where
   fmap _ Nothing  = Nothing
   fmap f (Just x) = Just (f x)
+
+instance Foldable Maybe where
+  foldr _ y Nothing  = y
+  foldr f y (Just x) = f x y
+
+  foldl _ y Nothing  = y
+  foldl f y (Just x) = f y x
 
 -- | Yields 'True' iff the argument is of the form @Just _@.
 isJust :: Maybe a -> Bool
