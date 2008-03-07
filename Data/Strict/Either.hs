@@ -21,6 +21,7 @@ module Data.Strict.Either (
   , fromLeft, fromRight
 ) where
 
+import Data.Foldable
 import Prelude hiding( Either(..), either )
 
 -- | The strict choice type.
@@ -29,6 +30,13 @@ data Either a b = Left !a | Right !b deriving(Eq, Ord, Read, Show)
 instance Functor (Either a) where
   fmap _ (Left  x) = Left x
   fmap f (Right y) = Right (f y)
+
+instance Foldable (Either a) where
+  foldr _ y (Left _)  = y
+  foldr f y (Right x) = f x y
+
+  foldl _ y (Left _)  = y
+  foldl f y (Right x) = f y x
 
 -- | Case analysis: if the value is @'Left' a@, apply the first function to @a@;
 -- if it is @'Right' b@, apply the second function to @b@.
