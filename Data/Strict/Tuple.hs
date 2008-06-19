@@ -60,3 +60,20 @@ curry f x y = f (x :!: y)
 uncurry :: (a -> b -> c) -> Pair a b -> c
 uncurry f (x :!: y) = f x y
 
+-- | Zip for strict pairs (defined with zipWith).
+zip :: [a] -> [b] -> [Pair a b]
+zip x y = zipWith (:!:) x y
+
+-- | Unzip for stict pairs into a (lazy) pair of lists.
+unzip :: [Pair a b] -> ([a], [b])
+unzip x = ( map fst x
+          , map snd x
+          )
+
+-- | Coerce a lazy pair to a strict pair.
+coerceS :: (a, b) -> (Pair a b)
+coerceS (a, b) = a :!: b
+
+-- | Coerce a strict pair to a lazy pair.
+coerceL :: (Pair a b) -> (a, b)
+coerceL (a :!: b) = (a, b)
