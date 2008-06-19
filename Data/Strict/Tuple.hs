@@ -27,9 +27,13 @@ module Data.Strict.Tuple (
   , snd
   , curry
   , uncurry
+  , zip
+  , unzip
+  , coerceS
+  , coerceL
 ) where
 
-import Prelude hiding( fst, snd, curry, uncurry )
+import Prelude hiding( fst, snd, curry, uncurry, zip, unzip )
 import Data.Array (Ix)
 
 infixl 2 :!:
