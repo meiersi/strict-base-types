@@ -22,9 +22,10 @@
 --
 -- @*' = *'rev >>= return . reverse@
 --
--- This module also contains rewrite RULES to make all the standard
--- functions in IO monad faster. Just import me and speed up you
--- programs up to 5 times!
+-- WARNING: This module also contains rewrite RULES to make all the
+-- standard functions in IO monad faster. Just import me and speed up
+-- you programs up to 5 times!
+--
 -----------------------------------------------------------------------------
 
 module Control.Monad.Strict (

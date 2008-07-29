@@ -1,5 +1,5 @@
 Name:           strict
-Version:        0.3.2
+Version:        0.4
 Synopsis:       Strict data types, String IO and strict monad sequence.
 Category:       Data, System, Control
 Description:
@@ -10,7 +10,7 @@ License:        BSD3
 License-File:   LICENSE
 Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>
 Maintainer:     Don Stewart <dons@galois.com>
-Copyright:      (c) 2006-2007 by Roman Leshchinskiy
+Copyright:      (c) 2006-2008 by Roman Leshchinskiy
 Homepage:       http://www.cse.unsw.edu.au/~rl/code/strict.html
 Cabal-Version: >= 1.2
 Build-type:     Simple
