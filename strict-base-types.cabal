@@ -1,0 +1,45 @@
+Name:           strict-base-types
+Version:        0.1.0.0
+Synopsis:       Strict variants of the types provided in base.
+Category:       Data
+Description:
+        This library provides strict variants of a subset of the Haskell data
+        types defined in @base@. More precisely, it provides strict @Pair@\'s,
+        strict @Maybe@\'s, and strict @Either@\'s. Additionally, this library
+        provides the @Strict@ type-class , which characterizes types that
+        are strict variants of lazy types.
+        .
+        Typically, you would just import the convenience module
+        @Data.Strict.Base.Types@ as follows.
+        .
+        >
+        > import qualified Data.Strict.Base.Types as S
+        >
+        .
+
+License:        BSD3
+License-File:   LICENSE
+Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>,
+                Simon Meier <iridcode@gmail.com>
+Maintainer:     Simon Meier <iridcode@gmail.com>
+Copyright:      (c) 2006-2008 by Roman Leshchinskiy
+                (c) 2013 by Simon Meier
+
+Homepage:       https://github.com/meiersi/strict-base-types
+
+Cabal-Version: >= 1.2
+Build-type:     Simple
+
+library
+  build-depends:     base >= 4
+  exposed-modules:
+        Data.Strict.Tuple
+        Data.Strict.Maybe
+        Data.Strict.Either
+        Data.Strict.Class
+        Data.Strict.Base.Types
+  ghc-options:    -Wall
+
+source-repository head
+  type:     git
+  location: https://github.com/meiersi/strict-base-types.git
