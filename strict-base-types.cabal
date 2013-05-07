@@ -3,19 +3,75 @@ Version:        0.1.0.0
 Synopsis:       Strict variants of the types provided in base.
 Category:       Data
 Description:
-        This library provides strict variants of a subset of the Haskell data
-        types defined in @base@. More precisely, it provides strict @Pair@\'s,
-        strict @Maybe@\'s, and strict @Either@\'s. Additionally, this library
-        provides the @Strict@ type-class , which characterizes types that
-        are strict variants of lazy types.
-        .
-        Typically, you would just import the convenience module
-        @Data.Strict.Base.Types@ as follows.
-        .
-        >
-        > import qualified Data.Strict.Base.Types as S
-        >
-        .
+     It is common knowledge that lazy datastructures can lead to space-leaks.
+     This problem is particularly prominent, when using lazy datastructures to
+     store the state of a long-running application in memory. The easiest
+     solution to this problem is to use fully strict types to store such state
+     values. By \"fully strict types\" we mean types for whose values it holds
+     that, if they are in weak-head normal form, then they are also in normal
+     form. Intuitively, this means that values of fully strict types cannot
+     contain unevaluated thunks.
+
+     To define a fully strict datatype, one typically uses the following recipe.
+     .
+     1. Make all fields of every constructor strict; i.e., add a bang to
+        all fields.
+     .
+     2. Use only strict types for the fields of the constructors. 
+     .
+     The second requirement is problematic as it rules out the use of
+     the standard Haskell 'Maybe', 'Either', and pair types. This library
+     solves this problem by providing strict variants of these types and their
+     corresponding standard support functions and type-class instances. 
+     .
+     Note that this library does currently not provide fully strict lists.
+     They can be added if they are really required. However, in many cases one
+     probably wants to use unboxed or strict boxed vectors from the 'vector'
+     library <http://hackage.haskell.org/package/vector> instead of strict
+     lists.  Moreover, instead of @String@s one probably wants to use strict
+     @Text@ values from the @text@ library
+     <http://hackage.haskell.org/package/text>.
+     .
+     This library also provides a 'StrictType' type-class that characterizes
+     types that are strict variants of existing lazy types. The following
+     example shows how this type-class simplifies the interoperability with
+     the existing lazy Haskell types. The example makes use of the @lens@
+     library <http://hackage.haskell.org/package/lens>.
+     .
+     > (-# LANGUAGE TemplateHaskell #-)   -- replace with curly braces, 
+     > (-# LANGUAGE OverloadedStrings #-) -- the Haddock prologues are a P.I.T.A!
+     > 
+     > import           Control.Lens
+     > import           Control.Monad.State.Strict
+     > import qualified Data.Map                   as M
+     > import           Data.Strict.Class (StricType (toStrict, toLazy))
+     > import qualified Data.Strict.Maybe          as S
+     > import qualified Data.Text                  as T
+     > 
+     > -- | An example of a state record as it could be used in a (very minimal)
+     > -- role-playing game.
+     > data GameState = GameState
+     >     ( _gsCooldown :: !(S.Maybe Int)
+     >     , _gsHealth   :: !Int
+     >     )  -- replace with curly braces, *grmbl* 
+     > 
+     > makeLenses ''GameState
+     > 
+     > asStrict :: StrictType t => Iso' (LazyVariant t) t
+     > asStrict = iso toStrict toLazy
+     > 
+     > asLazy :: StrictType t => Iso' t (LazyVariant t)
+     > asLazy = iso toLazy toStrict
+     > 
+     > type Game = State GameState
+     > 
+     > cast :: T.Text -> Game ()
+     > cast spell =
+     >     gsCooldown.asLazy .= M.lookup spell spellDuration
+     >     -- ... implement remainder of spell-casting ...
+     >   where
+     >     spellDuration = M.fromList [("fireball", 5)]
+
 
 License:        BSD3
 License-File:   LICENSE
@@ -37,9 +93,8 @@ library
         Data.Strict.Tuple
         Data.Strict.Maybe
         Data.Strict.Either
-        Data.Strict.Class
-        Data.Strict.Base.Types
-  ghc-options:    -Wall
+        Data.Strict.Type.Class
+  ghc-options:    -Wall -ddump-prep
 
 source-repository head
   type:     git

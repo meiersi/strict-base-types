@@ -1,17 +1,19 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric      #-}
+{-# LANGUAGE TypeFamilies       #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Strict.Tuple
 -- Copyright   :  (c) 2006-2007 Roman Leshchinskiy
+--                (c) 2013 Simon Meier
 -- License     :  BSD-style (see the file LICENSE)
 --
--- Maintainer  :  Roman Leshchinskiy <rl@cse.unsw.edu.au>
+-- Maintainer  :  Simon Meier <iridcode@gmail.com>
 -- Stability   :  experimental
--- Portability :  portable
+-- Portability :  GHC
 --
--- Strict pairs.
---
--- Same as regular Haskell pairs, but @(x :*: _|_) = (_|_ :*: y) = _|_@
+-- The strict variant of the standard Haskell pairs and the corresponding
+-- variants of the functions from "Data.Tuple".
 --
 -----------------------------------------------------------------------------
 
@@ -26,12 +28,44 @@ module Data.Strict.Tuple (
   , unzip
 ) where
 
-import Prelude hiding( fst, snd, curry, uncurry, zip, unzip )
-import Data.Ix
-import Data.Strict.Class
+import           Prelude           hiding (curry, fst, snd, uncurry, unzip, zip)
 
--- | The type of strict pairs.
-data Pair a b = !a :!: !b deriving(Eq, Ord, Show, Read, Bounded, Ix)
+import           Data.Data
+import           Data.Ix
+import           Data.Monoid
+
+import           GHC.Generics
+
+import           Data.Strict.Class
+
+-- | The type of strict pairs. Note that
+--
+-- > (x :!: _|_) = (_|_ :!: y) = _|_
+data Pair a b = !a :!: !b
+    deriving(Eq, Ord, Show, Read, Bounded, Ix, Data, Typeable, Generic)
+
+instance StrictType (Pair a b) where
+    type LazyVariant (Pair a b) = (a, b)
+
+    toStrict (a, b)    = a :!: b
+    toLazy   (a :!: b) = (a, b)
+
+instance Functor (Pair e) where
+    fmap f = toStrict . fmap f . toLazy
+
+instance (Monoid a, Monoid b) => Monoid (Pair a b) where
+  mempty          = toStrict mempty
+  m1 `mappend` m2 = toStrict (toLazy m1 `mappend` toLazy m2)
+
+{-  To be added once they make it to base
+
+instance Foldable (Pair e) where
+  foldMap f (_,x) = f x
+
+instance Traversable (Pair e) where
+  traverse f (e,x) = (,) e <$> f x
+
+-}
 
 -- | Extract the first component of a strict pair.
 fst :: Pair a b -> a
@@ -59,7 +93,3 @@ unzip x = ( map fst x
           , map snd x
           )
 
-instance Strict (Pair a b) where
-    type LazyVariant (Pair a b) = (a, b)
-    toStrict (a, b)    = a :!: b
-    toLazy   (a :!: b) = (a, b)
