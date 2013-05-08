@@ -98,7 +98,7 @@ Maintainer:     Simon Meier <iridcode@gmail.com>
 Copyright:      (c) 2006-2008 by Roman Leshchinskiy
                 (c) 2013 by Simon Meier
 Homepage:       https://github.com/meiersi/strict-base-types
-Cabal-Version: >= 1.2
+Cabal-Version: >= 1.6
 Build-type:     Simple
 
 source-repository head
