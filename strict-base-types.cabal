@@ -11,7 +11,7 @@ Description:
      that, if they are in weak-head normal form, then they are also in normal
      form. Intuitively, this means that values of fully strict types cannot
      contain unevaluated thunks.
-
+     .
      To define a fully strict datatype, one typically uses the following recipe.
      .
      1. Make all fields of every constructor strict; i.e., add a bang to
