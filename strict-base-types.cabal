@@ -1,4 +1,4 @@
-acName:           strict-base-types
+Name:           strict-base-types
 Version:        0.2
 Synopsis:       Strict variants of the types provided in base.
 Category:       Data
