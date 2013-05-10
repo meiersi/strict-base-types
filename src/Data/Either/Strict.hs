@@ -40,9 +40,13 @@ import qualified Prelude             as L
 
 import           Control.Applicative ((<$>))
 import           Control.DeepSeq     (NFData (..))
-import           Control.Lens.Iso    (Strict (..), iso)
+import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
+import           Control.Lens.Prism  (Prism, prism)
 import           Data.Aeson          (FromJSON (..), ToJSON (..))
+import           Data.Bifoldable     (Bifoldable (..))
+import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Binary         (Binary (..))
+import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Data           (Data (..), Typeable2 (..))
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
@@ -93,9 +97,34 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Either a b) where
   arbitrary = toStrict <$> arbitrary
   shrink    = map toStrict . shrink . toLazy
 
+-- bifunctors
+  
+instance Bifunctor Either where
+  bimap f _ (Left a) = Left (f a)
+  bimap _ g (Right a) = Right (g a)
+  first f (Left a) = Left (f a)
+  second g (Right a) = Right (g a)
+
+instance Bifoldable Either where
+  bifold (Left a) = a
+  bifold (Right b) = b
+  bifoldMap = either
+  bifoldr f _ c (Left a) = f a c
+  bifoldr _ g c (Right b) = g b c
+  bifoldl f _ c (Left a) = f c a
+  bifoldl _ g c (Right b) = g c b
+
+instance Bitraversable Either where
+  bitraverse f _ (Left a) = fmap Left (f a)
+  bitraverse _ g (Right b) = fmap Right (g b)
+  bisequenceA = either (fmap Left) (fmap Right)
+
 -- lens
 instance Strict (L.Either a b) (Either a b) where
   strict = iso toStrict toLazy
+
+instance Swapped Either where
+  swapped = either Right Left `iso` either Right Left
 
 -- missing functions
 --------------------
@@ -116,6 +145,13 @@ partitionEithers =
     left  a ~(l, r) = (a:l, r)
     right a ~(l, r) = (l, a:r)
 
+-- | Analogous to 'Control.Lens.Prism._Left' in "Control.Lens.Prism".
+_Left :: Prism (Either a c) (Either b c) a b
+_Left = prism Left $ either L.Right (L.Left . Right)
+
+-- | Analogous to 'Control.Lens.Prism._Right' in "Control.Lens.Prism".
+_Right :: Prism (Either c a) (Either c b) a b
+_Right = prism Right $ either (L.Left . Left) L.Right
 
 ------------------------------------------------------------------------------
 -- Code required to make this module independent of the 'strict' package
