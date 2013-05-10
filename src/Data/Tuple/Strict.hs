@@ -4,6 +4,8 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE UndecidableInstances  #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 -----------------------------------------------------------------------------
@@ -39,6 +41,7 @@ import qualified Prelude             as L
 
 import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
+import           Control.Lens.Each   (Index, Each(..))
 import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
 import           Control.Lens.Indexed (indexed)
 import           Control.Lens.Operators ((<&>))
@@ -130,6 +133,11 @@ instance Field2 (Pair a b) (Pair a b') b b' where
 
 instance Swapped Pair where
   swapped = iso swap swap
+
+type instance Index (Pair a b) = Int
+
+instance (Applicative f, a~a', b~b') => Each f (Pair a a') (Pair b b') a b where
+  each f (a :!: b) = (:!:) <$> indexed f (0::Int) a <*> indexed f (1::Int) b
 
 {-  To be added once they make it to base
 
