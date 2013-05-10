@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP                   #-}
 {-# LANGUAGE DeriveDataTypeable    #-}
 {-# LANGUAGE DeriveGeneric         #-}
+{-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 
@@ -35,13 +36,20 @@ import           Prelude             hiding (curry, fst, snd, uncurry, unzip,
                                       zip)
 import qualified Prelude             as L
 
-import           Control.Applicative ((<$>))
+import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
-import           Control.Lens.Iso    (Strict (..), iso)
+import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
+import           Control.Lens.Indexed (indexed)
+import           Control.Lens.Operators ((<&>))
+import           Control.Lens.Tuple  (Field1 (..), Field2 (..))
 import           Data.Aeson          (FromJSON (..), ToJSON (..))
+import           Data.Bifoldable     (Bifoldable (..))
+import           Data.Bifunctor      (Bifunctor (..))
+import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Binary         (Binary (..))
 import           Data.Data           (Data (..), Typeable2 (..))
 import           Data.Monoid         (Monoid (..))
+import qualified Data.Tuple          as L
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
@@ -93,11 +101,34 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Pair a b) where
   arbitrary = toStrict <$> arbitrary
   shrink    = map toStrict . shrink . toLazy
 
+-- bifunctors
+instance Bifunctor Pair where
+  bimap f g (a :!: b) = f a :!: g b
+  first f (a :!: b) = f a :!: b
+  second g (a :!: b) = a :!: g b
+
+instance Bifoldable Pair where
+  bifold (a :!: b) = a `mappend` b
+  bifoldMap f g (a :!: b) = f a `mappend` g b
+  bifoldr f g c (a :!: b) = g b (f a c)
+  bifoldl f g c (a :!: b) = g (f c a) b
+
+instance Bitraversable Pair where
+  bitraverse f g (a :!: b) = (:!:) <$> f a <*> g b
+  bisequenceA (a :!: b) = (:!:) <$> a <*> b
+
 -- lens
 instance Strict (a, b) (Pair a b) where
   strict = iso toStrict toLazy
 
+instance Field1 (Pair a b) (Pair a' b) a a' where
+  _1 k (a :!: b) = indexed k (0 :: Int) a <&> \a' -> (a' :!: b)
 
+instance Field2 (Pair a b) (Pair a b') b b' where
+  _2 k (a :!: b) = indexed k (1 :: Int) b <&> \b' -> (a :!: b')
+
+instance Swapped Pair where
+  swapped = iso swap swap
 
 {-  To be added once they make it to base
 
@@ -111,6 +142,10 @@ instance Traversable (Pair e) where
 
 -- missing functions
 --------------------
+
+-- | Analagous to 'L.swap' from "Data.Tuple"
+swap :: Pair a b -> Pair b a
+swap (a :!: b) = b :!: a
 
 -- | Zip for strict pairs (defined with zipWith).
 zip :: [a] -> [b] -> [Pair a b]
