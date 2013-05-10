@@ -50,7 +50,7 @@ import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Binary         (Binary (..))
 import           Data.Data           (Data (..), Typeable2 (..))
 import           Data.Monoid         (Monoid (..))
-import qualified Data.Tuple          as L
+import qualified Data.Tuple          as L () -- just for haddocks. Is there a better way?
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif

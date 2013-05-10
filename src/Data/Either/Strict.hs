@@ -104,8 +104,8 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Either a b) where
 instance Bifunctor Either where
   bimap f _ (Left a) = Left (f a)
   bimap _ g (Right a) = Right (g a)
-  first f (Left a) = Left (f a)
-  second g (Right a) = Right (g a)
+  first f = either (Left . f) Right
+  second g = either Left (Right . g)
 
 instance Bifoldable Either where
   bifold (Left a) = a
