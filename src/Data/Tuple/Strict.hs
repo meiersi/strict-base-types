@@ -27,6 +27,7 @@ module Data.Tuple.Strict (
   , snd
   , curry
   , uncurry
+  , swap
   , zip
   , unzip
 ) where

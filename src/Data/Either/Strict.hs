@@ -31,6 +31,8 @@ module Data.Either.Strict (
   , lefts
   , rights
   , partitionEithers
+  , _Left
+  , _Right
 ) where
 
 import           Data.Strict.Either  (Either (Left, Right), either, isLeft,

@@ -42,6 +42,8 @@ module Data.Maybe.Strict (
    , maybeToList
    , catMaybes
    , mapMaybe
+   , _Just
+   , _Nothing
 ) where
 
 import           Prelude             hiding (Maybe (..), maybe)
