@@ -50,6 +50,7 @@ import qualified Prelude             as L
 import           Control.Applicative ((<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), iso)
+import           Control.Lens.Prism  (Prism, Prism', prism, prism')
 import           Data.Aeson          (FromJSON (..), ToJSON (..))
 import           Data.Binary         (Binary (..))
 import           Data.Data           (Data (..), Typeable1 (..))
@@ -135,6 +136,14 @@ mapMaybe f (x:xs) = case f x of
     Just r  -> r:rs
   where
     rs = mapMaybe f xs
+
+-- | Analogous to 'Control.Lens.Prism._Just' in "Control.Lens.Prism"
+_Just :: Prism (Maybe a) (Maybe b) a b
+_Just = prism Just $ maybe (Left Nothing) Right
+
+-- | Analogous to 'Control.Lens.Prism._Nothing' in "Control.Lens.Prism"
+_Nothing :: Prism' (Maybe a) ()
+_Nothing = prism' (const Nothing) $ maybe (L.Just ()) (const L.Nothing)
 
 ------------------------------------------------------------------------------
 -- Code required to make this module independent of the 'strict' package
