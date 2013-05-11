@@ -40,7 +40,7 @@ import           Data.Strict.Either  (Either (Left, Right), either, isLeft,
 import           Prelude             hiding (Either (..), either)
 import qualified Prelude             as L
 
-import           Control.Applicative ((<$>))
+import           Control.Applicative (pure, (<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
 import           Control.Lens.Prism  (Prism, prism)
@@ -48,6 +48,8 @@ import           Data.Aeson          (FromJSON (..), ToJSON (..))
 import           Data.Bifoldable     (Bifoldable (..))
 import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Binary         (Binary (..))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
 import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Data           (Data (..), Typeable2 (..))
 #if __GLASGOW_HASKELL__ >= 706
@@ -77,6 +79,17 @@ deriving instance Typeable2 Either
 deriving instance Generic  (Either a b)
 #endif
 
+instance Foldable (Either e) where
+  foldr _ y (Left _)  = y
+  foldr f y (Right x) = f x y
+
+  foldl _ y (Left _)  = y
+  foldl f y (Right x) = f y x
+
+instance Traversable (Either e) where
+  traverse _ (Left x)  = pure (Left x)
+  traverse f (Right x) = Right <$> f x
+
 
 -- deepseq
 instance (NFData a, NFData b) => NFData (Either a b) where
@@ -100,7 +113,7 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Either a b) where
   shrink    = map toStrict . shrink . toLazy
 
 -- bifunctors
-  
+
 instance Bifunctor Either where
   bimap f _ (Left a) = Left (f a)
   bimap _ g (Right a) = Right (g a)
@@ -172,17 +185,6 @@ data Either a b = Left !a | Right !b
 {-
 instance Functor (Either a) where
   fmap f  = toStrict . fmap f . toLazy
-
-instance Foldable (Either a) where
-  foldr _ y (Left _)  = y
-  foldr f y (Right x) = f x y
-
-  foldl _ y (Left _)  = y
-  foldl f y (Right x) = f y x
-
-instance Traversable (Either e) where
-  traverse _ (Left x)  = pure (Left x)
-  traverse f (Right x) = Right <$> f x
 
 -- | Analogous to 'L.either' in "Data.Either".
 either :: (a -> c) -> (b -> c) -> Either a b -> c
