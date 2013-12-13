@@ -1,5 +1,5 @@
 Name:           strict-base-types
-Version:        0.2
+Version:        0.2.1
 Synopsis:       Strict variants of the types provided in base.
 Category:       Data
 Description:
@@ -114,7 +114,7 @@ library
     , binary     >= 0.5
     , deepseq    >= 1.3
     , strict     == 0.3.*
-    , bifunctors < 3.3
+    , bifunctors >= 3.0
     , ghc-prim
   hs-source-dirs:    src
   exposed-modules:
