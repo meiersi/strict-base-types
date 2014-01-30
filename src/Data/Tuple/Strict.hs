@@ -41,7 +41,14 @@ import qualified Prelude             as L
 
 import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
+
+#if MIN_VERSION_lens(4,0,0)
+import           Control.Lens.At     (Index)
+import           Control.Lens.Each   (Each(..))
+#else
 import           Control.Lens.Each   (Index, Each(..))
+#endif
+
 import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
 import           Control.Lens.Indexed (indexed)
 import           Control.Lens.Operators ((<&>))
@@ -134,10 +141,18 @@ instance Field2 (Pair a b) (Pair a b') b b' where
 instance Swapped Pair where
   swapped = iso swap swap
 
+
 type instance Index (Pair a b) = Int
 
+#if MIN_VERSION_lens(4,0,0)
+instance (a~a', b~b') => Each (Pair a a') (Pair b b') a b where
+  each f ~(a :!: b) = (:!:) <$> f a <*> f b
+  {-# INLINE each #-}
+#else
 instance (Applicative f, a~a', b~b') => Each f (Pair a a') (Pair b b') a b where
   each f (a :!: b) = (:!:) <$> indexed f (0::Int) a <*> indexed f (1::Int) b
+  {-# INLINE each #-}
+#endif
 
 {-  To be added once they make it to base
 

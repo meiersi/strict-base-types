@@ -1,5 +1,5 @@
 Name:           strict-base-types
-Version:        0.2.1
+Version:        0.2.2
 Synopsis:       Strict variants of the types provided in base.
 Category:       Data
 Description:
@@ -96,7 +96,7 @@ Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>,
                 Simon Meier <iridcode@gmail.com>
 Maintainer:     Simon Meier <iridcode@gmail.com>
 Copyright:      (c) 2006-2008 by Roman Leshchinskiy
-                (c) 2013 by Simon Meier
+                (c) 2013-2014 by Simon Meier
 Homepage:       https://github.com/meiersi/strict-base-types
 Cabal-Version: >= 1.6
 Build-type:     Simple
