@@ -37,7 +37,6 @@ module Data.Tuple.Strict (
 import           Data.Strict.Tuple   (Pair ((:!:)), curry, fst, snd, uncurry)
 import           Prelude             hiding (curry, fst, snd, uncurry, unzip,
                                       zip)
-import qualified Prelude             as L
 
 import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
@@ -58,7 +57,11 @@ import           Data.Bifoldable     (Bifoldable (..))
 import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Binary         (Binary (..))
+#if MIN_VERSION_base(4,7,0)
+import           Data.Data           (Data (..), Typeable)
+#else
 import           Data.Data           (Data (..), Typeable2 (..))
+#endif
 import           Data.Monoid         (Monoid (..))
 import qualified Data.Tuple          as L () -- just for haddocks. Is there a better way?
 #if __GLASGOW_HASKELL__ >= 706
@@ -80,7 +83,11 @@ toLazy (a :!: b) = (a, b)
 --------------------
 
 deriving instance (Data a, Data b) => Data     (Pair a b)
+#if MIN_VERSION_base(4,7,0)
+deriving instance Typeable Pair
+#else
 deriving instance Typeable2 Pair
+#endif
 
 -- fails with compiler panic on GHC 7.4.2
 #if __GLASGOW_HASKELL__ >= 706

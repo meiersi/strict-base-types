@@ -51,7 +51,11 @@ import           Data.Binary         (Binary (..))
 import           Data.Foldable       (Foldable (..))
 import           Data.Traversable    (Traversable (..))
 import           Data.Bitraversable  (Bitraversable (..))
+#if MIN_VERSION_base(4,7,0)
+import           Data.Data           (Data (..), Typeable)
+#else
 import           Data.Data           (Data (..), Typeable2 (..))
+#endif
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
@@ -73,7 +77,11 @@ toLazy (Right y) = L.Right y
 --------------------
 
 deriving instance (Data a, Data b) => Data     (Either a b)
+#if MIN_VERSION_base(4,7,0)
+deriving instance Typeable Either
+#else
 deriving instance Typeable2 Either
+#endif
 
 #if __GLASGOW_HASKELL__ >= 706
 deriving instance Generic  (Either a b)
