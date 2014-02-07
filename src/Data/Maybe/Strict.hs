@@ -55,7 +55,11 @@ import           Control.Lens.Iso    (Strict (..), iso)
 import           Control.Lens.Prism  (Prism, Prism', prism, prism')
 import           Data.Aeson          (FromJSON (..), ToJSON (..))
 import           Data.Binary         (Binary (..))
+#if MIN_VERSION_base(4,7,0)
+import           Data.Data           (Data (..), Typeable)
+#else
 import           Data.Data           (Data (..), Typeable1 (..))
+#endif
 import           Data.Monoid         (Monoid (..))
 import           Data.Strict.Maybe   (Maybe (Nothing, Just), fromJust,
                                       fromMaybe, isJust, isNothing, maybe)
@@ -77,7 +81,11 @@ toLazy Nothing  = L.Nothing
 toLazy (Just x) = L.Just x
 
 deriving instance Data a => Data (Maybe a)
+#if MIN_VERSION_base(4,7,0)
+deriving instance Typeable Maybe
+#else
 deriving instance Typeable1 Maybe
+#endif
 
 #if __GLASGOW_HASKELL__ >= 706
 deriving instance Generic  (Maybe a)
