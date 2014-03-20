@@ -49,7 +49,7 @@ module Data.Maybe.Strict (
 import           Prelude             hiding (Maybe (..), maybe)
 import qualified Prelude             as L
 
-import           Control.Applicative (Applicative (..), (<$>))
+import           Control.Applicative (pure, (<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), iso)
 import           Control.Lens.Prism  (Prism, Prism', prism, prism')
@@ -91,21 +91,6 @@ instance Monoid a => Monoid (Maybe a) where
   Nothing `mappend` _       = Nothing
   _       `mappend` Nothing = Nothing
   Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
-
--- applicative
-instance Applicative Maybe where
-    pure x = Just x
-
-    Nothing <*> _       = Nothing
-    _       <*> Nothing = Nothing
-    Just f  <*> Just x  = Just (f x)
-
--- monad
-instance Monad Maybe where
-    return x = Just x
-
-    Nothing >>= _ = Nothing
-    Just x  >>= f = f x
 
 -- foldable
 instance Foldable Maybe where
