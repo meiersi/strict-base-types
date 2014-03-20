@@ -49,7 +49,7 @@ module Data.Maybe.Strict (
 import           Prelude             hiding (Maybe (..), maybe)
 import qualified Prelude             as L
 
-import           Control.Applicative ((<$>))
+import           Control.Applicative (pure, (<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), iso)
 import           Control.Lens.Prism  (Prism, Prism', prism, prism')
@@ -61,6 +61,8 @@ import           Data.Data           (Data (..), Typeable)
 import           Data.Data           (Data (..), Typeable1 (..))
 #endif
 import           Data.Monoid         (Monoid (..))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
 import           Data.Strict.Maybe   (Maybe (Nothing, Just), fromJust,
                                       fromMaybe, isJust, isNothing, maybe)
 #if __GLASGOW_HASKELL__ >= 706
@@ -97,6 +99,16 @@ instance Monoid a => Monoid (Maybe a) where
   Nothing `mappend` _       = Nothing
   _       `mappend` Nothing = Nothing
   Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
+
+-- foldable
+instance Foldable Maybe where
+    foldMap _ Nothing  = mempty
+    foldMap f (Just x) = f x
+
+-- traversable
+instance Traversable Maybe where
+    traverse _ Nothing  = pure Nothing
+    traverse f (Just x) = Just <$> f x
 
 -- deepseq
 instance NFData a => NFData (Maybe a) where
