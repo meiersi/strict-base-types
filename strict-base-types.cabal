@@ -17,12 +17,12 @@ Description:
      1. Make all fields of every constructor strict; i.e., add a bang to
         all fields.
      .
-     2. Use only strict types for the fields of the constructors. 
+     2. Use only strict types for the fields of the constructors.
      .
      The second requirement is problematic as it rules out the use of
      the standard Haskell 'Maybe', 'Either', and pair types. This library
      solves this problem by providing strict variants of these types and their
-     corresponding standard support functions and type-class instances. 
+     corresponding standard support functions and type-class instances.
      .
      Note that this library does currently not provide fully strict lists.
      They can be added if they are really required. However, in many cases one
@@ -40,30 +40,30 @@ Description:
      It is used in the following example to simplify the modification of
      strict fields.
      .
-     > (-# LANGUAGE TemplateHaskell #-)   -- replace with curly braces, 
+     > (-# LANGUAGE TemplateHaskell #-)   -- replace with curly braces,
      > (-# LANGUAGE OverloadedStrings #-) -- the Haddock prologues are a P.I.T.A!
-     > 
+     >
      > import           Control.Lens ( (.=), Strict(strict), from, Iso', makeLenses)
      > import           Control.Monad.State.Strict (State)
      > import qualified Data.Map                   as M
      > import qualified Data.Maybe.Strict          as S
      > import qualified Data.Text                  as T
-     > 
+     >
      > -- | An example of a state record as it could be used in a (very minimal)
      > -- role-playing game.
      > data GameState = GameState
      >     ( _gsCooldown :: !(S.Maybe Int)
      >     , _gsHealth   :: !Int
      >     )  -- replace with curly braces, *grmbl*
-     > 
+     >
      > makeLenses ''GameState
-     > 
+     >
      > -- The isomorphism, which converts a strict field to its lazy variant
      > lazy :: Strict lazy strict => Iso' strict lazy
      > lazy = from strict
-     > 
+     >
      > type Game = State GameState
-     > 
+     >
      > cast :: T.Text -> Game ()
      > cast spell =
      >     gsCooldown.lazy .= M.lookup spell spellDuration
@@ -81,7 +81,7 @@ Description:
      .
      - only provides the fully strict variants of types from 'base',
      .
-     - is in-sync with the current base library (base-4.6), 
+     - is in-sync with the current base library (base-4.6),
      .
      - provides the missing instances for (future) Haskell platform packages, and
      .
@@ -106,7 +106,7 @@ source-repository head
   location: https://github.com/meiersi/strict-base-types.git
 
 library
-  build-depends:     
+  build-depends:
       base       >= 4.5 && < 5
     , lens       >= 3.9
     , QuickCheck >= 2
