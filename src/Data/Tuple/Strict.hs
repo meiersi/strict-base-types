@@ -57,6 +57,8 @@ import           Data.Bifoldable     (Bifoldable (..))
 import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Binary         (Binary (..))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
 #if MIN_VERSION_base(4,7,0)
 import           Data.Data           (Data (..), Typeable)
 #else
@@ -95,6 +97,15 @@ deriving instance Typeable2 Pair
 #if __GLASGOW_HASKELL__ >= 706
 deriving instance Generic  (Pair a b)
 #endif
+
+instance Functor (Pair e) where
+    fmap f = toStrict . fmap f . toLazy
+
+instance Foldable (Pair e) where
+  foldMap f (_ :!: x) = f x
+
+instance Traversable (Pair e) where
+  traverse f (e :!: x) = (:!:) e <$> f x
 
 instance (Monoid a, Monoid b) => Monoid (Pair a b) where
   mempty                            = mempty :!: mempty
@@ -169,15 +180,6 @@ instance (Applicative f, a~a', b~b') => Each f (Pair a a') (Pair b b') a b where
 instance (Hashable a, Hashable b) => Hashable (Pair a b) where
   hashWithSalt salt = hashWithSalt salt . toLazy
 
-{-  To be added once they make it to base
-
-instance Foldable (Pair e) where
-  foldMap f (_,x) = f x
-
-instance Traversable (Pair e) where
-  traverse f (e,x) = (,) e <$> f x
--}
-
 
 -- missing functions
 --------------------
@@ -212,9 +214,6 @@ instance StrictType (Pair a b) where
 
     toStrict (a, b)    = a :!: b
     toLazy   (a :!: b) = (a, b)
-
-instance Functor (Pair e) where
-    fmap f = toStrict . fmap f . toLazy
 
 -- | Extract the first component of a strict pair.
 fst :: Pair a b -> a
