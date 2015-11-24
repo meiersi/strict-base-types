@@ -60,6 +60,7 @@ import           Data.Data           (Data (..), Typeable2 (..))
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
 
 
 -- Utilities
@@ -150,6 +151,10 @@ instance Strict (L.Either a b) (Either a b) where
 
 instance Swapped Either where
   swapped = either Right Left `iso` either Right Left
+
+-- hashable
+instance (Hashable a, Hashable b) => Hashable (Either a b) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 -- missing functions
 --------------------

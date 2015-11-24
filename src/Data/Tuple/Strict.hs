@@ -68,6 +68,8 @@ import qualified Data.Tuple          as L () -- just for haddocks. Is there a be
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
+
 
 -- Utilities
 ------------
@@ -162,6 +164,10 @@ instance (Applicative f, a~a', b~b') => Each f (Pair a a') (Pair b b') a b where
   each f (a :!: b) = (:!:) <$> indexed f (0::Int) a <*> indexed f (1::Int) b
   {-# INLINE each #-}
 #endif
+
+-- hashable
+instance (Hashable a, Hashable b) => Hashable (Pair a b) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 {-  To be added once they make it to base
 

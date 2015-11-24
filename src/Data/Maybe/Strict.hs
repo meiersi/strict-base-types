@@ -69,6 +69,7 @@ import           Data.Strict.Maybe   (Maybe (Nothing, Just), fromJust,
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
 
 
 -- utilities
@@ -135,6 +136,9 @@ instance Arbitrary a => Arbitrary (Maybe a) where
 instance Strict (L.Maybe a) (Maybe a) where
   strict = iso toStrict toLazy
 
+-- hashable
+instance Hashable a => Hashable (Maybe a) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 -- | Analogous to 'L.listToMaybe' in "Data.Maybe".
 listToMaybe :: [a] -> Maybe a
