@@ -38,7 +38,6 @@ import           Data.Strict.Tuple   (Pair ((:!:)), curry, fst, snd, uncurry)
 import           Prelude             hiding (curry, fst, snd, uncurry, unzip,
                                       zip)
 
-import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
 
 #if MIN_VERSION_lens(4,0,0)
@@ -57,21 +56,26 @@ import           Data.Bifoldable     (Bifoldable (..))
 import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Bitraversable  (Bitraversable (..))
 import           Data.Binary         (Binary (..))
-import           Data.Foldable       (Foldable (..))
-import           Data.Traversable    (Traversable (..))
 #if MIN_VERSION_base(4,7,0)
 import           Data.Data           (Data (..), Typeable)
 #else
 import           Data.Data           (Data (..), Typeable2 (..))
 #endif
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative (Applicative ((<*>)), (<$>))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
 import           Data.Monoid         (Monoid (..))
-import qualified Data.Tuple          as L () -- just for haddocks. Is there a better way?
+#endif
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
 import           Data.Hashable       (Hashable(..))
 
+#if __HADDOCK__
+import Data.Tuple ()
+#endif
 
 -- Utilities
 ------------
