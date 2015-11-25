@@ -46,10 +46,11 @@ module Data.Maybe.Strict (
    , _Nothing
 ) where
 
+import           Data.Strict.Maybe   (Maybe (Nothing, Just), fromJust,
+                                      fromMaybe, isJust, isNothing, maybe)
 import           Prelude             hiding (Maybe (..), maybe)
 import qualified Prelude             as L
 
-import           Control.Applicative (pure, (<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), iso)
 import           Control.Lens.Prism  (Prism, Prism', prism, prism')
@@ -60,15 +61,17 @@ import           Data.Data           (Data (..), Typeable)
 #else
 import           Data.Data           (Data (..), Typeable1 (..))
 #endif
-import           Data.Monoid         (Monoid (..))
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative (pure, (<$>))
 import           Data.Foldable       (Foldable (..))
 import           Data.Traversable    (Traversable (..))
-import           Data.Strict.Maybe   (Maybe (Nothing, Just), fromJust,
-                                      fromMaybe, isJust, isNothing, maybe)
+import           Data.Monoid         (Monoid (..))
+#endif
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
 
 
 -- utilities
@@ -135,6 +138,9 @@ instance Arbitrary a => Arbitrary (Maybe a) where
 instance Strict (L.Maybe a) (Maybe a) where
   strict = iso toStrict toLazy
 
+-- hashable
+instance Hashable a => Hashable (Maybe a) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 -- | Analogous to 'L.listToMaybe' in "Data.Maybe".
 listToMaybe :: [a] -> Maybe a

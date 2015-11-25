@@ -40,7 +40,6 @@ import           Data.Strict.Either  (Either (Left, Right), either, isLeft,
 import           Prelude             hiding (Either (..), either)
 import qualified Prelude             as L
 
-import           Control.Applicative (pure, (<$>))
 import           Control.DeepSeq     (NFData (..))
 import           Control.Lens.Iso    (Strict (..), Swapped (..), iso)
 import           Control.Lens.Prism  (Prism, prism)
@@ -48,18 +47,23 @@ import           Data.Aeson          (FromJSON (..), ToJSON (..))
 import           Data.Bifoldable     (Bifoldable (..))
 import           Data.Bifunctor      (Bifunctor (..))
 import           Data.Binary         (Binary (..))
-import           Data.Foldable       (Foldable (..))
-import           Data.Traversable    (Traversable (..))
 import           Data.Bitraversable  (Bitraversable (..))
 #if MIN_VERSION_base(4,7,0)
 import           Data.Data           (Data (..), Typeable)
 #else
 import           Data.Data           (Data (..), Typeable2 (..))
 #endif
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative (pure, (<$>))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
+import           Data.Monoid         (Monoid (..))
+#endif
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
 
 
 -- Utilities
@@ -140,7 +144,9 @@ instance Bifoldable Either where
 instance Bitraversable Either where
   bitraverse f _ (Left a) = fmap Left (f a)
   bitraverse _ g (Right b) = fmap Right (g b)
+#if !MIN_VERSION_bifunctors(5,1,0)
   bisequenceA = either (fmap Left) (fmap Right)
+#endif
 
 -- lens
 instance Strict (L.Either a b) (Either a b) where
@@ -148,6 +154,10 @@ instance Strict (L.Either a b) (Either a b) where
 
 instance Swapped Either where
   swapped = either Right Left `iso` either Right Left
+
+-- hashable
+instance (Hashable a, Hashable b) => Hashable (Either a b) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 -- missing functions
 --------------------

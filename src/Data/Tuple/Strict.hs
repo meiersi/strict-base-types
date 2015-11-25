@@ -38,7 +38,6 @@ import           Data.Strict.Tuple   (Pair ((:!:)), curry, fst, snd, uncurry)
 import           Prelude             hiding (curry, fst, snd, uncurry, unzip,
                                       zip)
 
-import           Control.Applicative (Applicative ((<*>)), (<$>))
 import           Control.DeepSeq     (NFData (..))
 
 #if MIN_VERSION_lens(4,0,0)
@@ -62,12 +61,21 @@ import           Data.Data           (Data (..), Typeable)
 #else
 import           Data.Data           (Data (..), Typeable2 (..))
 #endif
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative (Applicative ((<*>)), (<$>))
+import           Data.Foldable       (Foldable (..))
+import           Data.Traversable    (Traversable (..))
 import           Data.Monoid         (Monoid (..))
-import qualified Data.Tuple          as L () -- just for haddocks. Is there a better way?
+#endif
 #if __GLASGOW_HASKELL__ >= 706
 import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
+import           Data.Hashable       (Hashable(..))
+
+#if __HADDOCK__
+import Data.Tuple ()
+#endif
 
 -- Utilities
 ------------
@@ -93,6 +101,15 @@ deriving instance Typeable2 Pair
 #if __GLASGOW_HASKELL__ >= 706
 deriving instance Generic  (Pair a b)
 #endif
+
+instance Functor (Pair e) where
+    fmap f = toStrict . fmap f . toLazy
+
+instance Foldable (Pair e) where
+  foldMap f (_ :!: x) = f x
+
+instance Traversable (Pair e) where
+  traverse f (e :!: x) = (:!:) e <$> f x
 
 instance (Monoid a, Monoid b) => Monoid (Pair a b) where
   mempty                            = mempty :!: mempty
@@ -133,7 +150,9 @@ instance Bifoldable Pair where
 
 instance Bitraversable Pair where
   bitraverse f g (a :!: b) = (:!:) <$> f a <*> g b
+#if !MIN_VERSION_bifunctors(5,1,0)
   bisequenceA (a :!: b) = (:!:) <$> a <*> b
+#endif
 
 -- lens
 instance Strict (a, b) (Pair a b) where
@@ -161,14 +180,9 @@ instance (Applicative f, a~a', b~b') => Each f (Pair a a') (Pair b b') a b where
   {-# INLINE each #-}
 #endif
 
-{-  To be added once they make it to base
-
-instance Foldable (Pair e) where
-  foldMap f (_,x) = f x
-
-instance Traversable (Pair e) where
-  traverse f (e,x) = (,) e <$> f x
--}
+-- hashable
+instance (Hashable a, Hashable b) => Hashable (Pair a b) where
+  hashWithSalt salt = hashWithSalt salt . toLazy
 
 
 -- missing functions
@@ -204,9 +218,6 @@ instance StrictType (Pair a b) where
 
     toStrict (a, b)    = a :!: b
     toLazy   (a :!: b) = (a, b)
-
-instance Functor (Pair e) where
-    fmap f = toStrict . fmap f . toLazy
 
 -- | Extract the first component of a strict pair.
 fst :: Pair a b -> a
