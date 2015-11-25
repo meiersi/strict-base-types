@@ -1,2 +1,4 @@
 /dist/
 /.hsenv/
+.stack-work/
+stack.yaml
