@@ -1,7 +1,14 @@
+* 0.4.0
+  - Add contributions by Oleg Grenrus (@phadej)
+    - Add 'Functor', 'Foldable', 'Traversable' for 'Pair'
+    - bifunctors-5.1 compatibility
+    - GHC 7.10.x -Wall cleaning
+    - Add 'Hashable' instances for 'Pair', 'Maybe', and 'Either'.
+
 * 0.3.0
   - Add 'Foldable', and 'Traversable' instances (thanks @jaspervdj)
 
-* 0.2.3 
+* 0.2.3
   - started changelog
   - Make compatible with GHC 7.8 RC1
 

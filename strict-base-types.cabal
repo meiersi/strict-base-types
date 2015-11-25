@@ -1,5 +1,5 @@
 Name:           strict-base-types
-Version:        0.3.0
+Version:        0.4.0
 Synopsis:       Strict variants of the types provided in base.
 Category:       Data
 Description:
@@ -123,5 +123,5 @@ library
       Data.Tuple.Strict
       Data.Maybe.Strict
       Data.Either.Strict
-  ghc-options:    -Wall
+  ghc-options:    -Wall -fwarn-incomplete-uni-patterns
 
