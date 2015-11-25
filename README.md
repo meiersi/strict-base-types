@@ -1,4 +1,4 @@
-
+![build status](https://travis-ci.org/meiersi/strict-base-types.svg?branch=master)
 
 
 Strict variants of the types provided by base
