@@ -102,6 +102,9 @@ Cabal-Version: >= 1.6
 Build-type:     Simple
 Tested-with:    GHC==7.4.2, GHC==7.6.3, GHC==7.8.4, GHC==7.10.2
 
+extra-source-files:
+  CHANGES
+
 source-repository head
   type:     git
   location: https://github.com/meiersi/strict-base-types.git
