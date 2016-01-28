@@ -99,8 +99,8 @@ deriving instance Generic  (Maybe a)
 instance Monoid a => Monoid (Maybe a) where
   mempty = Nothing
 
-  Nothing `mappend` _       = Nothing
-  _       `mappend` Nothing = Nothing
+  Nothing `mappend` m       = m
+  m       `mappend` Nothing = m
   Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
 
 -- foldable

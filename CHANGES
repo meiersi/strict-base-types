@@ -1,3 +1,17 @@
+* 0.5.0
+  - Change the implementation of the 'Monoid Maybe' instance such that it is
+    the same as the one for the lazy 'Maybe'; i.e., we now use
+
+      Nothing `mappend` m       = m
+      m       `mappend` Nothing = m
+      Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
+
+    instead of
+
+      Nothing `mappend` _       = Nothing
+      _       `mappend` Nothing = Nothing
+      Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
+
 * 0.4.0
   - Add contributions by Oleg Grenrus (@phadej)
     - Add 'Functor', 'Foldable', 'Traversable' for 'Pair'
