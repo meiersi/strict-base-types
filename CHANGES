@@ -1,3 +1,7 @@
+* 0.6.0
+  - Add contribution by Bas van Dijk (@basvandijk)
+    - Add 'Semigroup' instance for base-4.9.0.0
+
 * 0.5.0
   - Change the implementation of the 'Monoid Maybe' instance such that it is
     the same as the one for the lazy 'Maybe'; i.e., we now use
