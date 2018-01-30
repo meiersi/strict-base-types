@@ -72,10 +72,8 @@ import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
 import           Data.Hashable       (Hashable(..))
-#if MIN_VERSION_base(4,9,0)
 import           Data.Semigroup      (Semigroup)
 import qualified Data.Semigroup      as Semigroup
-#endif
 
 
 -- utilities
@@ -100,19 +98,22 @@ deriving instance Typeable1 Maybe
 deriving instance Generic  (Maybe a)
 #endif
 
-#if MIN_VERSION_base(4,9,0)
 instance Semigroup a => Semigroup (Maybe a) where
   Nothing <> m       = m
   m       <> Nothing = m
   Just x1 <> Just x2 = Just (x1 Semigroup.<> x2)
-#endif
 
+#if MIN_VERSION_base(4,11,0)
+instance Semigroup a => Monoid (Maybe a) where
+  mempty = Nothing
+#else
 instance Monoid a => Monoid (Maybe a) where
   mempty = Nothing
 
   Nothing `mappend` m       = m
   m       `mappend` Nothing = m
   Just x1 `mappend` Just x2 = Just (x1 `mappend` x2)
+#endif
 
 -- foldable
 instance Foldable Maybe where
