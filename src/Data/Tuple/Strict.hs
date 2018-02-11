@@ -72,6 +72,7 @@ import           GHC.Generics        (Generic (..))
 #endif
 import           Test.QuickCheck     (Arbitrary (..))
 import           Data.Hashable       (Hashable(..))
+import           Data.Semigroup      (Semigroup (..))
 
 #if __HADDOCK__
 import Data.Tuple ()
@@ -110,6 +111,9 @@ instance Foldable (Pair e) where
 
 instance Traversable (Pair e) where
   traverse f (e :!: x) = (:!:) e <$> f x
+
+instance (Semigroup a, Semigroup b) => Semigroup (Pair a b) where
+  (x1 :!: y1) <> (x2 :!: y2) = (x1 <> x2) :!: (y1 <> y2)
 
 instance (Monoid a, Monoid b) => Monoid (Pair a b) where
   mempty                            = mempty :!: mempty
