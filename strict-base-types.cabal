@@ -94,7 +94,7 @@ License:        BSD3
 License-File:   LICENSE
 Author:         Roman Leshchinskiy <rl@cse.unsw.edu.au>,
                 Simon Meier <iridcode@gmail.com>
-Maintainer:     Simon Meier <iridcode@gmail.com>
+Maintainer:     Bas van Dijk <v.dijk.bas@gmail.com>, Simon Meier <iridcode@gmail.com>
 Copyright:      (c) 2006-2008 by Roman Leshchinskiy
                 (c) 2013-2014 by Simon Meier
 Homepage:       https://github.com/meiersi/strict-base-types
