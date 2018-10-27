@@ -41,7 +41,7 @@ Example
 
 This library comes with batteries included; i.e., missing instances
 for type-classes from the `deepseq`, `binary`, `aeson`, `QuickCheck`, and
-`lens` packages are included. Of particluar interest is the `Strict`
+`lens` packages are included. Of particular interest is the `Strict`
 type-class provided by the lens library
 (http://hackage.haskell.org/packages/archive/lens/3.9.0.2/doc/html/Control-Lens-Iso.html#t:Strict).
 It is used in the following example to simplify the modification of
